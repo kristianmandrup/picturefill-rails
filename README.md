@@ -1,6 +1,6 @@
 # Picturefill View helpers for Rails
 
-[picturefill](https://github.com/scottjehl/picturefill) is currently the best "hack" for rendering Responsive Images on a web page.
+[picturefill](https://github.com/scottjehl/picturefill) is currently the best way for rendering [Responsive Images](http://5by5.tv/webahead/25) on a web page.
 
 *picturefill-rails* provides nice view helper methods to render the picturefill.
 
@@ -22,37 +22,45 @@
 </div>
 ```   
 
-Can now be written like this, using the provided View helpers: 
+The above can be rendered in Rails 3+ by writing the following code, using the View helpers provided by the Rails engine included: 
 
 ```haml
 = picturefill 'A giant stone face at The Bayon temple in Angkor Thom, Cambodia' do
-  = pic_src 'small.jpg'
-  = pic_src 'small.jpg',     "(min-device-pixel-ratio: 2.0)"
-  = pic_src 'medium.jpg',    "(min-width: 400px)"
-  = pic_src 'medium_x2.jpg', "(min-width: 400px) and (min-device-pixel-ratio: 2.0)"
+  = picture_src 'small.jpg'
+  = picture_src 'small.jpg',     "(min-device-pixel-ratio: 2.0)"
+  = picture_src 'medium.jpg',    "(min-width: 400px)"
+  = picture_src 'medium_x2.jpg', "(min-width: 400px) and (min-device-pixel-ratio: 2.0)"
+  = picture_src 'largs.jpg',     "(min-width: 800px)"
+  = picture_src 'large_x2.jpg',  "(min-width: 800px) and (min-device-pixel-ratio: 2.0)"
 ```
 
-## Convenience functionality
+Note: This example uses [HAML](https://github.com/haml/haml) as the rendering engine.
 
-Obviously there is huge potential to cut down on the bloat here by taking advantage of common conventions. Fx if the image src name ends in fx `_x2` it should auto-concatenate 
-`(min-device-pixel-ratio: 2.0)` to the `data-media` attribute.
+### Optimizations using conventions
 
-If you use a `ratio: 'x2'` option to `#pic_src` it should auto-generate the complete 'x2' version of the image source using this convention.
-
-### Optimized
-
-Using the convenience functionality:
+Using conventions, and an extra `ratio:` option, the following shorthand is possible:
 
 ```haml
 = picturefill 'A giant stone face at The Bayon temple in Angkor Thom, Cambodia' do
-  = pic_src 'small.jpg', ratio: 'x2'
-  = pic_src 'medium.jpg', "400", ratio: 'x2'
-  = pic_src 'large.jpg',  "800", ratio: 'x2'  
+  = picture_src 'small.jpg', ratio: 'x2'
+  = picture_src 'medium.jpg', "400", ratio: 'x2'
+  = picture_src 'large.jpg',  "800", ratio: 'x2'  
 ```
 
-Please help contribute this functionality ;)
+This will ouput exactly the same HTML as the previous example :)
+See the specs for more details...
 
-PS: Currently not tested and code needs to be refactored somewhat...
+## Usage
+
+In your Gemfile:
+
+`gem 'picturefill-rails'`
+
+A number of specs are included which all pass and should ensure that the view helpers work as expected.
+
+## TODO
+
+The `#picture_src` method works, but could use some heavy refactoring! I don't like methods of more than 10 lines! Is a bad sign. Reponsibilities should be off-loaded to other methods (or classes)
 
 ## Contributing to picturefill-rails
  

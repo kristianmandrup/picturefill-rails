@@ -1,63 +1,70 @@
 module Picturefill
-  class ViewHelper
+  module ViewHelper
     def picturefill options = {}, &block
-      alt = options.delete(:alt]
-      clazz = options.delete(:class)
-      opts = options.merge(:"data-alt" => alt, :"class" => clazz, :"data-picture" => true)
+      opts = {}
+      alt = options.delete :alt
+      clazz = options.delete :class
+      opts.merge! :"data-alt" => alt unless alt.blank?
+      opts.merge! "class" => clazz unless clazz.blank?
+      opts.merge! :"data-picture" => true
 
       content = block_given? ? capture(&block) : ''
-      content_tag :div, content, options
+      content_tag :div, content, opts
     end
 
-    def pic_src src, media=nil, options = {}
-      options.merge! {:"data-src" => src}
+    # UGLY AS HELL!!! Needs refactor :P
+    def picture_src src, *args
+      options = args.extract_options!
+      media = args.first.to_s if args.first.kind_of?(String) || args.first.kind_of?(Fixnum)
 
-      ratio_opt = options[:ratio]
-      media = Picturefill::ViewHelper.extract media
+      ratio_opt = options.delete(:ratio)
+      media_opt = Picturefill::ViewHelper.extract media unless media.blank? 
 
-      unless media && media =~ /min-device-pixel-ratio/
+      unless media_opt && media_opt =~ /min-device-pixel-ratio/
         # use filename to provide ratio_opt
-        fn = filename(src) =~ /_x\d(\d)?/
+        filename = Picturefill::ViewHelper.filename(src).first
+        fn = filename =~ /_x\d(\d)?/
         if fn && !ratio_opt
-          ratio_opt = fn.match(/_x\d(\d)?/).to_s
+          ratio_opt = filename.match(/x\d(\d)?$/).to_s
+        else
+          auto_ratio_tag = ratio_opt[0] == 'x' unless ratio_opt.blank?
         end
-
-        if ratio_opt          
-          auto_ratio_tag = ratio[0] == 'x'    
-          ratio = Picturefill::ViewHelper.ratio_attrib ratio_opt if ratio_opt
-        end
-
-        media = [media, ratio].compact.join(' and ')
+        ratio = Picturefill::ViewHelper.ratio_attrib(ratio_opt) unless ratio_opt.blank?
+        media_opt = [media_opt, ratio].compact.join(' and ')
       end
       
-      options.merge!(:"data-media" => media)
-
-      capture do
-        content_tag :div, content, options
-        if auto_ratio_tag
-          filename = Picturefill::ViewHelper.ratio_file_name src, ratio_opt
-          pic_src filename, options.merge(:ratio => ratio_opt)
-        end
+      next_content = if auto_ratio_tag
+        opts = options.dup
+        filename = Picturefill::ViewHelper.ratio_file_name src, ratio_opt
+        opts.merge!(:ratio => ratio_opt.delete('x'))
+        picture_src filename, media, opts
       end
+
+      options.merge! :"data-media" => media_opt unless auto_ratio_tag || media_opt.blank?
+      options.merge! :"data-src" => src      
+
+      content_tag(:div, nil, options) + next_content
     end
 
-    def pic_fallback src, options = {}
-      content_tag :noscript, image_tag(src, options)
+    def picture_fallback src, options = {}
+      content_tag :noscript, content_tag(:img, nil, options.merge(src: src))
     end
 
     class << self
       def filename src
         src_parts = src.split('.')
         ext = src_parts[1..-1].join('.')
-        src_parts.first
+        [src_parts.first, ext]
       end
 
       def ratio_file_name src, ratio_opt
+        fn_parts = filename(src)
         ratio_opt = ratio_opt.delete('x')
-        "#{filename(src)}_x2.#{ext}"
+        "#{fn_parts.first}_x2.#{fn_parts.last}"
       end
 
       def extract media
+        return if media.blank?
         case media 
         when /^(\d+)$/
           "(min-width: #{media}px)"
@@ -73,7 +80,7 @@ module Picturefill
       end
 
       def ratio_attrib ratio
-        ratio = ratio.to_s.delete!('x')
+        ratio = ratio.to_s.delete('x')
         minor = 0
         case ratio.to_s
         when /^\d/
@@ -81,7 +88,7 @@ module Picturefill
         when /^\d.\d/
           major, minor = ratio.split '.'        
         else
-          raise ArgumentError, "Invalid ratio, must be a number, fx '2.5' or '2' (even 'x2' or 'x2.5')"
+          raise ArgumentError, "Invalid ratio: #{ratio}, must be a number, fx '2.5' or '2' (even 'x2' or 'x2.5')"
         end
         ratio_attribute major, minor
       end      
