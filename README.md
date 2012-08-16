@@ -66,6 +66,47 @@ A number of specs are included which all pass and should ensure that the view he
 
 The `#picture_src` method works, but could use some heavy refactoring! I don't like methods of more than 10 lines! Is a bad sign. Reponsibilities should be off-loaded to other methods (or classes)
 
+## Assets
+
+The gem now also includes the picturefill javascript assets that are automatically available for the asset pipeline. In your `application.js` manifest file require:
+
+* `picturefill.js`
+* `picturefill\matchemedia.js`
+
+See [demo](http://scottjehl.github.com/picturefill/) for a full example!
+
+## jQuery Picture
+
+[jquery picture](http://jquerypicture.com/) is now also partly supported. It is very similar to picturefill but with slightly different tags.
+
+Assets `jquery-picture.min.js` and `jquery-picture.js` are included.
+
+The view helper includes the view helper methods:
+
+* `picture(alt)`
+* `source(src, media, options = {})
+
+```haml
+= picture 'A giant stone face at The Bayon temple in Angkor Thom, Cambodia' do
+  = source 'small.jpg', ratio: 'x2'
+  = source 'medium.jpg', "400", ratio: 'x2'
+  = source 'large.jpg',  "800", ratio: 'x2'  
+  # ...
+  = picture_fallback "external/imgs/small.jpg", alt: "A giant stone face at The Bayon 
+```
+
+And to enable:
+
+```javascript
+$(function(){
+    $('picture').picture();
+});
+```
+
+## Random Notes
+
+[critique of picturefill](http://oscargodson.com/posts/picturefill-needs-to-die.html)
+
 ## Contributing to picturefill-rails
  
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet.

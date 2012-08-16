@@ -1,5 +1,17 @@
 module Picturefill
   module ViewHelper
+    def picture alt = nil
+      options = {}
+      options.merge alt: alt if alt
+      content_tag :picture, nil, options
+    end
+
+    def source src, *args
+      options = args.extract_options!
+      media = args.first.to_s if args.first.kind_of?(String) || args.first.kind_of?(Fixnum)      
+      picture_src src, media, options.merge(tag: :source)
+    end
+
     def picturefill options = {}, &block
       opts = {}
       alt = options.delete :alt
@@ -17,6 +29,7 @@ module Picturefill
       options = args.extract_options!
       media = args.first.to_s if args.first.kind_of?(String) || args.first.kind_of?(Fixnum)
 
+      tag = options[:tag] || :div
       ratio_opt = options.delete(:ratio)
       media_opt = Picturefill::ViewHelper.extract media unless media.blank? 
 
@@ -43,7 +56,7 @@ module Picturefill
       options.merge! :"data-media" => media_opt unless auto_ratio_tag || media_opt.blank?
       options.merge! :"data-src" => src      
 
-      content_tag(:div, nil, options) + next_content
+      content_tag(tag, nil, options) + next_content
     end
 
     def picture_fallback src, options = {}
