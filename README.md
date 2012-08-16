@@ -66,9 +66,11 @@ A number of specs are included which all pass and should ensure that the view he
 
 The `#picture_src` method works, but could use some heavy refactoring! I don't like methods of more than 10 lines! Is a bad sign. Reponsibilities should be off-loaded to other methods (or classes)
 
+Currently the gem only supports Ruby 1.9+ and has only been tested on 1.9.3.
+
 ## Assets
 
-The gem now also includes the picturefill javascript assets that are automatically available for the asset pipeline. In your `application.js` manifest file require:
+The gem includes the picturefill javascript assets that are automatically available for the asset pipeline. In your `application.js` manifest file require:
 
 * `picturefill.js`
 * `picturefill\matchemedia.js`
@@ -79,23 +81,25 @@ See [demo](http://scottjehl.github.com/picturefill/) for a full example!
 
 [jquery picture](http://jquerypicture.com/) is now also partly supported. It is very similar to picturefill but with slightly different tags.
 
-Assets `jquery-picture.min.js` and `jquery-picture.js` are included.
+The assets `jquery-picture.min.js` and `jquery-picture.js` are included in vendor/assets.
 
-The view helper includes the view helper methods:
+The view helper includes the helper methods:
 
-* `picture(alt)`
-* `source(src, media, options = {})
+* `picture_tag(alt)`
+* `source_tag(src, media, options = {})
+
+Usage example:
 
 ```haml
-= picture 'A giant stone face at The Bayon temple in Angkor Thom, Cambodia' do
-  = source 'small.jpg', ratio: 'x2'
-  = source 'medium.jpg', "400", ratio: 'x2'
-  = source 'large.jpg',  "800", ratio: 'x2'  
+= picture_tag 'A giant stone face at The Bayon temple in Angkor Thom, Cambodia' do
+  = source_tag 'small.jpg', ratio: 'x2'
+  = source_tag 'medium.jpg', "400", ratio: 'x2'
+  = source_tag 'large.jpg',  "800", ratio: 'x2'  
   # ...
   = picture_fallback "external/imgs/small.jpg", alt: "A giant stone face at The Bayon 
 ```
 
-And to enable:
+And to enable via jquery:
 
 ```javascript
 $(function(){

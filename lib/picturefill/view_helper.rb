@@ -1,12 +1,12 @@
 module Picturefill
   module ViewHelper
-    def picture alt = nil
+    def picture_tag alt = nil
       options = {}
       options.merge alt: alt if alt
       content_tag :picture, nil, options
     end
 
-    def source src, *args
+    def source_tag src, *args
       options = args.extract_options!
       media = args.first.to_s if args.first.kind_of?(String) || args.first.kind_of?(Fixnum)      
       picture_src src, media, options.merge(tag: :source)
