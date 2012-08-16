@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = "picturefill-rails"
-  s.version = "0.1.0"
+  s.version = "0.2.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Kristian Mandrup"]
@@ -30,7 +30,11 @@ Gem::Specification.new do |s|
     "lib/picturefill/view_helper.rb",
     "picturefill-rails.gemspec",
     "spec/picturefill/view_helper_spec.rb",
-    "spec/spec_helper.rb"
+    "spec/spec_helper.rb",
+    "vendor/assets/javascripts/jquery-picture.js",
+    "vendor/assets/javascripts/jquery-picture.min.js",
+    "vendor/assets/javascripts/picturefill.js",
+    "vendor/assets/javascripts/picturefill/matchmedia.js"
   ]
   s.homepage = "http://github.com/kristianmandrup/picturefill-rails"
   s.licenses = ["MIT"]
