@@ -28,6 +28,8 @@ Gem::Specification.new do |s|
     "lib/picturefill-rails.rb",
     "lib/picturefill/engine.rb",
     "lib/picturefill/view_helper.rb",
+    "picturefill-rails.gemspec",
+    "spec/picturefill/view_helper_spec.rb",
     "spec/spec_helper.rb"
   ]
   s.homepage = "http://github.com/kristianmandrup/picturefill-rails"
