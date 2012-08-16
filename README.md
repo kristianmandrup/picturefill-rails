@@ -32,6 +32,8 @@ The above can be rendered in Rails 3+ by writing the following code, using the V
   = picture_src 'medium_x2.jpg', "(min-width: 400px) and (min-device-pixel-ratio: 2.0)"
   = picture_src 'largs.jpg',     "(min-width: 800px)"
   = picture_src 'large_x2.jpg',  "(min-width: 800px) and (min-device-pixel-ratio: 2.0)"
+  # ...
+  = picture_fallback "external/imgs/small.jpg", alt: "A giant stone face at The Bayon temple in Angkor Thom, Cambodia" 
 ```
 
 Note: This example uses [HAML](https://github.com/haml/haml) as the rendering engine.
@@ -45,6 +47,8 @@ Using conventions, and an extra `ratio:` option, the following shorthand is poss
   = picture_src 'small.jpg', ratio: 'x2'
   = picture_src 'medium.jpg', "400", ratio: 'x2'
   = picture_src 'large.jpg',  "800", ratio: 'x2'  
+  # ...
+  = picture_fallback "external/imgs/small.jpg", alt: "A giant stone face at The Bayon temple in Angkor Thom, Cambodia"
 ```
 
 This will ouput exactly the same HTML as the previous example :)
