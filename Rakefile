@@ -17,8 +17,8 @@ Jeweler::Tasks.new do |gem|
   gem.name = "picturefill-rails"
   gem.homepage = "http://github.com/kristianmandrup/picturefill-rails"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{Picturefill view helpers for Rails to facilitate Responsive Images}
+  gem.description = %Q{Use picturefill with Rails :)}
   gem.email = "kmandrup@gmail.com"
   gem.authors = ["Kristian Mandrup"]
   # dependencies defined in Gemfile
