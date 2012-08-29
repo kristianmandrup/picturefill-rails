@@ -1,5 +1,12 @@
 module Picturefill
   module ViewHelper
+    def imgset_tag src, srcset = nil, options = {}
+      options.merge!(:src => src)
+      options.merge!(:srcset => srcset) if srcset
+      content_tag :img, nil, options
+    end
+    alias_method :imageset_tag, :imgset_tag
+
     def picture_tag alt = nil
       options = {}
       options.merge alt: alt if alt

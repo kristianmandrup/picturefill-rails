@@ -135,9 +135,27 @@ Use the `srcset` attribute of `<img>` elements. For example:
 
 Include `srcset.min.js` in your page.
 
-`= img_srcset ...`
+*View helper*
 
-TODO: Implement the Rails View Helper method!
+* `imgset_tag src, srcset, options = {}` (alias `imageset_tag`)
+
+```haml
+= imgset_tag "banner.jpeg", "banner-HD.jpeg 2x, banner-phone.jpeg 100w,banner-phone-HD.jpeg 100w 2x", alt: "The Breakfast Combo"
+```
+
+outputs the HTML code shown above.
+
+If you leave out the srcset argument it will fallback to a single src image
+
+```haml
+= imgset_tag "banner.jpeg", alt: "The Breakfast Combo"
+```
+
+Same as
+
+```haml
+= image_tag "banner.jpeg", alt: "The Breakfast Combo"
+```
 
 ### Assets
 
