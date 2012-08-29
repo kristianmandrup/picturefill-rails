@@ -1,5 +1,11 @@
 # Picturefill View helpers for Rails
 
+This gem provides polyfills for 3 wys to render responsive images:
+
+* picturefill
+* jquery-picture
+* srcset
+
 [picturefill](https://github.com/scottjehl/picturefill) is currently the best way for rendering [Responsive Images](http://5by5.tv/webahead/25) on a web page.
 
 *picturefill-rails* provides nice view helper methods to render the picturefill.
@@ -64,7 +70,7 @@ A number of specs are included which all pass and should ensure that the view he
 
 ## TODO
 
-The `#picture_src` method works, but could use some heavy refactoring! I don't like methods of more than 10 lines! Is a bad sign. Reponsibilities should be off-loaded to other methods (or classes)
+The `#picture_src` method works, but could use some heavy refactoring! I don't like methods of more than 10 lines! Reponsibilities should be off-loaded to other methods (or classes)
 
 Currently the gem only supports Ruby 1.9+ and has only been tested on 1.9.3.
 
@@ -107,9 +113,47 @@ $(function(){
 });
 ```
 
-## Random Notes
+*Arcticles*
 
 [critique of picturefill](http://oscargodson.com/posts/picturefill-needs-to-die.html)
+
+## Img SrcSet Polyfill
+
+See [the specification][spec] for the reference algorithm.
+
+See [repo]: https://github.com/borismus/srcset-polyfill
+
+### Usage
+
+Use the `srcset` attribute of `<img>` elements. For example:
+
+    <img alt="The Breakfast Combo"
+         src="banner.jpeg"
+         srcset="banner-HD.jpeg 2x, banner-phone.jpeg 100w,
+                 banner-phone-HD.jpeg 100w 2x"/>
+
+
+Include `srcset.min.js` in your page.
+
+`= img_srcset ...`
+
+TODO: Implement the Rails View Helper method!
+
+### Assets
+
+The gem includes srcset javascript assets that are automatically available for the asset pipeline. In your `application.js` manifest file require:
+
+* `srcset.min.js` (prod)
+* `srcset.js` (dev/test)
+
+### Open questions
+
+- How to reliably check for srcset support in the browser (so as to not
+  attempt to polyfill if it's not necessary?)
+- Is it safe to use `-webkit-transform` to scale things?
+- Is it worth falling back to `-webkit-image-set` if available?
+
+[spec]: http://www.whatwg.org/specs/web-apps/current-work/multipage/embedded-content-1.html#processing-the-image-candidates
 
 ## Contributing to picturefill-rails
  
