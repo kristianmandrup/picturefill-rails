@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "picturefill-rails"
-  s.version = "0.2.0"
+  s.version = "0.2.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Kristian Mandrup"]
-  s.date = "2012-08-16"
+  s.date = "2012-08-29"
   s.description = "Use picturefill with Rails :)"
   s.email = "kmandrup@gmail.com"
   s.extra_rdoc_files = [
@@ -31,10 +31,20 @@ Gem::Specification.new do |s|
     "picturefill-rails.gemspec",
     "spec/picturefill/view_helper_spec.rb",
     "spec/spec_helper.rb",
+    "spec/srcset/banner-HD.jpeg",
+    "spec/srcset/banner-phone-HD.jpeg",
+    "spec/srcset/banner-phone.jpeg",
+    "spec/srcset/banner.jpeg",
+    "spec/srcset/index.html",
+    "spec/srcset/tests/index.html",
+    "spec/srcset/tests/srcset-tests.js",
+    "spec/srcset/view_helper_spec.rb",
     "vendor/assets/javascripts/jquery-picture.js",
     "vendor/assets/javascripts/jquery-picture.min.js",
     "vendor/assets/javascripts/picturefill.js",
-    "vendor/assets/javascripts/picturefill/matchmedia.js"
+    "vendor/assets/javascripts/picturefill/matchmedia.js",
+    "vendor/assets/javascripts/srcset.js",
+    "vendor/assets/javascripts/srcset.min.js"
   ]
   s.homepage = "http://github.com/kristianmandrup/picturefill-rails"
   s.licenses = ["MIT"]
