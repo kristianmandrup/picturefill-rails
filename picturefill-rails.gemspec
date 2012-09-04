@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "picturefill-rails"
-  s.version = "0.2.1"
+  s.version = "0.2.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Kristian Mandrup"]
-  s.date = "2012-08-29"
+  s.date = "2012-09-04"
   s.description = "Use picturefill with Rails :)"
   s.email = "kmandrup@gmail.com"
   s.extra_rdoc_files = [
