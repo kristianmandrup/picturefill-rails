@@ -1,3 +1,5 @@
+require 'rubygems'
+
 module Picturefill
   module ViewHelper
     def imgset_tag src, srcset = nil, options = {}
@@ -15,7 +17,7 @@ module Picturefill
 
     def source_tag src, *args
       options = args.extract_options!
-      media = args.first.to_s if args.first.kind_of?(String) || args.first.kind_of?(Fixnum)      
+      media = extract_media_option(args)
       picture_src src, media, options.merge(tag: :source)
     end
 
@@ -34,11 +36,11 @@ module Picturefill
     # UGLY AS HELL!!! Needs refactor :P
     def picture_src src, *args
       options = args.extract_options!
-      media = args.first.to_s if args.first.kind_of?(String) || args.first.kind_of?(Fixnum)
+      media = extract_media_option(args)
 
       tag = options[:tag] || :div
       ratio_opt = options.delete(:ratio)
-      media_opt = Picturefill::ViewHelper.extract media unless media.blank? 
+      media_opt = Picturefill::ViewHelper.extract media unless media.blank?
 
       unless media_opt && media_opt =~ /min-device-pixel-ratio/
         # use filename to provide ratio_opt
@@ -52,7 +54,7 @@ module Picturefill
         ratio = Picturefill::ViewHelper.ratio_attrib(ratio_opt) unless ratio_opt.blank?
         media_opt = [media_opt, ratio].compact.join(' and ')
       end
-      
+
       next_content = if auto_ratio_tag
         opts = options.dup
         filename = Picturefill::ViewHelper.ratio_file_name src, ratio_opt
@@ -61,13 +63,24 @@ module Picturefill
       end
 
       options.merge! :"data-media" => media_opt unless auto_ratio_tag || media_opt.blank?
-      options.merge! :"data-src" => src      
+      options.merge! :"data-src" => src
 
       content_tag(tag, nil, options) + next_content
     end
 
     def picture_fallback src, options = {}
       content_tag :noscript, content_tag(:img, nil, options.merge(src: src))
+    end
+
+    private
+
+    def extract_media_option(args)
+      # Handle Fixnum deprecation from ruby-2.4.0
+      if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('2.4.0')
+        args.first.to_s if args.first.kind_of?(String) || args.first.kind_of?(Integer)
+      else
+        args.first.to_s if args.first.kind_of?(String) || args.first.kind_of?(Fixnum)
+      end
     end
 
     class << self
@@ -85,7 +98,7 @@ module Picturefill
 
       def extract media
         return if media.blank?
-        case media 
+        case media
         when /^(\d+)$/
           "(min-width: #{media}px)"
         when /^(\d+)px$/
@@ -94,7 +107,7 @@ module Picturefill
           "(#{media}px)"
         when /min-width: (\d+)px$/
           "(#{media})"
-        else 
+        else
           raise ArgumentError, "Picturefill :media attribute could not be parsed, was: #{media}"
         end
       end
@@ -106,12 +119,12 @@ module Picturefill
         when /^\d/
           major = ratio
         when /^\d.\d/
-          major, minor = ratio.split '.'        
+          major, minor = ratio.split '.'
         else
           raise ArgumentError, "Invalid ratio: #{ratio}, must be a number, fx '2.5' or '2' (even 'x2' or 'x2.5')"
         end
         ratio_attribute major, minor
-      end      
+      end
 
       protected
 
