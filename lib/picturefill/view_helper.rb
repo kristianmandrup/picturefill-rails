@@ -1,3 +1,5 @@
+require 'rubygems'
+
 module Picturefill
   module ViewHelper
     def imgset_tag src, srcset = nil, options = {}
@@ -15,7 +17,7 @@ module Picturefill
 
     def source_tag src, *args
       options = args.extract_options!
-      media = args.first.to_s if args.first.kind_of?(String) || args.first.kind_of?(Fixnum)      
+      media = extract_media_option(args)
       picture_src src, media, options.merge(tag: :source)
     end
 
@@ -34,7 +36,7 @@ module Picturefill
     # UGLY AS HELL!!! Needs refactor :P
     def picture_src src, *args
       options = args.extract_options!
-      media = args.first.to_s if args.first.kind_of?(String) || args.first.kind_of?(Fixnum)
+      media = extract_media_option(args)
 
       tag = options[:tag] || :div
       ratio_opt = options.delete(:ratio)
@@ -68,6 +70,17 @@ module Picturefill
 
     def picture_fallback src, options = {}
       content_tag :noscript, content_tag(:img, nil, options.merge(src: src))
+    end
+
+    private
+
+    def extract_media_option(args)
+      # Handle Fixnum deprecation from ruby-2.4.0
+      if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('2.4.0')
+        args.first.to_s if args.first.kind_of?(String) || args.first.kind_of?(Integer)
+      else
+        args.first.to_s if args.first.kind_of?(String) || args.first.kind_of?(Fixnum)
+      end
     end
 
     class << self
